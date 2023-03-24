@@ -28,8 +28,14 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  var history = <WordPair>[];
+
+  GlobalKey? historyListKey;
 
   void getNext() {
+    history.insert(0, current);
+    var animatedlist = historyListKey?.currentState as AnimatedListState?;
+    animatedlist?.insertItem(0);
     current = WordPair.random();
     notifyListeners();
   }
@@ -120,11 +126,12 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var pair = appState.current;
+    var numberFavorites = appState.favorites.length;
 
     return ListView(
       padding: const EdgeInsets.all(30),
       children: [
+        Text("You have $numberFavorites favorites"),
         for (var favorite in appState.favorites)
           FavoriteCard(favorite: favorite, appState: appState),
       ],
@@ -148,7 +155,7 @@ class FavoriteCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
         title: Text(favorite.toString()),
-        subtitle: Text("Click to remove $favorite from the favorites"),
+        subtitle: Text("Click to remove"),
         // subtitleTextStyle: ,
         leading: Icon(Icons.favorite),
         trailing: Icon(Icons.bookmark_remove),
@@ -185,7 +192,6 @@ class GeneratorPage extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () {
                   appState.toggleFavorite();
-                  print(appState.favorites);
                 },
                 icon: Icon(icon),
                 label: Text('Like'),
