@@ -1,5 +1,5 @@
-name: namer_app
-description: A new Flutter project.
+name: favoriter
+description: First project using flutter, a list of random words
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -18,6 +18,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "0.12.0"
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "asset/icons/icon_firstapp.png"
 
   flutter_lints: ^2.0.0
 
