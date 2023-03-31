@@ -41,18 +41,9 @@ class MyAppState extends ChangeNotifier {
     Extrato("Oi", "aaaa", -2.5),
     Extrato("Oi", "aaaa", -2.5),
     Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
-    Extrato("Oi", "aaaa", -2.5),
+    Extrato("Oi", "aaaa", -3.5),
+    Extrato("Oi", "aaaa", -3.5),
+    Extrato("Oi", "aaaa", -3.5),
     Extrato("Oi", "aaaa", -3.5),
   ];
 
@@ -64,12 +55,12 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  double calcularExtrato() {
+  void calcularExtrato() {
     for (var i = 0; i < historico.length; i++) {
       saldo = saldo + historico[i].valor;
     }
 
-    return saldo;
+    notifyListeners();
   }
 }
 
@@ -83,6 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+
     Widget page;
     switch (selectedIndex) {
       case 0:
@@ -97,6 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+      ),
       home: Builder(
         builder: (context) => Scaffold(
           body: page,
@@ -116,7 +113,7 @@ class HistoryPage extends StatelessWidget {
     var colorScheme = Theme.of(context).colorScheme;
     final theme = Theme.of(context);
 
-    final textStyle = TextStyle(fontSize: 20);
+    final textStyle = TextStyle(fontSize: 18);
 
     return MaterialApp(
       home: Builder(
@@ -124,8 +121,8 @@ class HistoryPage extends StatelessWidget {
                 appBar: AppBar(
                   title: Text("Meu Dinheiro"),
                   centerTitle: true,
-                  backgroundColor: theme.colorScheme.secondary,
-                  foregroundColor: theme.colorScheme.surface,
+                  backgroundColor: Colors.grey[350],
+                  foregroundColor: Colors.black,
                 ),
                 body: Column(
                   children: [
@@ -189,24 +186,43 @@ class ExtratoScroll extends StatelessWidget {
                 ),
             itemCount: historico.length,
             itemBuilder: (_, int index) {
-              return ListTile(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(12)),
-                title: Text(
-                  "${historico[index].nome}",
-                  style: textStyle.copyWith(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  "${historico[index].categoria}",
-                  style: textStyle.copyWith(fontSize: 16),
-                ),
-                trailing: Text(
-                  "R\$ ${historico[index].valor}",
-                  style: textStyle.copyWith(),
-                ),
-              );
+              return CardTransacao(
+                  historico: historico, textStyle: textStyle, index: index);
             }),
+      ),
+    );
+  }
+}
+
+class CardTransacao extends StatelessWidget {
+  const CardTransacao({
+    super.key,
+    required this.historico,
+    required this.textStyle,
+    required this.index,
+  });
+
+  final List<Extrato> historico;
+  final TextStyle textStyle;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: Colors.grey),
+          borderRadius: BorderRadius.circular(12)),
+      title: Text(
+        "${historico[index].nome}",
+        style: textStyle.copyWith(fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(
+        "${historico[index].categoria}",
+        style: textStyle.copyWith(fontSize: 16),
+      ),
+      trailing: Text(
+        "R\$ ${historico[index].valor}",
+        style: textStyle.copyWith(),
       ),
     );
   }
@@ -238,7 +254,7 @@ class HeaderExtrato extends StatelessWidget {
               Text(
                 "Montante",
                 style: textStyle.copyWith(
-                    fontWeight: FontWeight.bold, fontSize: 24),
+                    fontWeight: FontWeight.bold, fontSize: 22),
               ),
               Text(
                 "Saldo em conta",
@@ -248,7 +264,8 @@ class HeaderExtrato extends StatelessWidget {
           ),
           Text(
             "R\$ $saldo",
-            style: textStyle.copyWith(fontWeight: FontWeight.bold),
+            style:
+                textStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 24),
           ),
         ],
       ),
@@ -265,27 +282,83 @@ class AddExtractPage extends StatelessWidget {
 
     return MaterialApp(
       home: Builder(
-          builder: (context) => Scaffold(
-                appBar: AppBar(
-                  title: Text("Meu Dinheiro"),
-                  centerTitle: true,
-                  backgroundColor: theme.colorScheme.secondary,
-                  foregroundColor: theme.colorScheme.surface,
-                ),
-                body: Column(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Text("aaaaaaaaa"),
-                          Icon(Icons.favorite),
-                        ],
-                      ),
-                    ),
-                    FooterBotao(),
-                  ],
-                ),
-              )),
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text("Adicionar"),
+            centerTitle: true,
+            backgroundColor: Colors.grey[350],
+            foregroundColor: Colors.black,
+          ),
+          body: FormsCadastro(),
+        ),
+      ),
+    );
+  }
+}
+
+class FormsCadastro extends StatelessWidget {
+  FormsCadastro({
+    super.key,
+  });
+
+  final myController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Form(
+              child: Column(
+                children: [
+                  InputExtrato(myController: myController),
+                  // Row(
+                  //   children: <Widget>[
+                  //     RadioListTile(
+                  //       title: const Text('Entrada'),
+                  //       value: "Entrada",
+                  //       groupValue: "entreada",
+                  //       onChanged: (value) => print(value),
+                  //     ),
+                  //     RadioListTile(
+                  //       value: "Saída",
+                  //       groupValue: 1,
+                  //       onChanged: (value) => print(value),
+                  //     ),
+                  //   ],
+                  // ),
+                  Text("aaaaaaaaa"),
+                  Icon(Icons.favorite),
+                ],
+              ),
+            ),
+          ),
+        ),
+        FooterBotao(),
+      ],
+    );
+  }
+}
+
+class InputExtrato extends StatelessWidget {
+  const InputExtrato({
+    super.key,
+    required this.myController,
+    // required this.label,
+  });
+
+  final TextEditingController myController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: myController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        // hintText: label,
+      ),
     );
   }
 }
