@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../components/FooterBotao.dart';
 import '../components/FormsCadastro.dart';
 
 class AddExtractPage extends StatelessWidget {
@@ -14,12 +13,7 @@ class AddExtractPage extends StatelessWidget {
             backgroundColor: Colors.grey[350],
             foregroundColor: Colors.black,
           ),
-          body: Column(
-            children: [
-              FormsCadastro(),
-              FooterBotao(index: false),
-            ],
-          ),
+          body: FormsCadastro(),
         ),
       ),
     );

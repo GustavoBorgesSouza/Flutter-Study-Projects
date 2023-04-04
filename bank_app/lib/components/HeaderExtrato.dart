@@ -35,7 +35,7 @@ class HeaderExtrato extends StatelessWidget {
             ],
           ),
           Text(
-            "R\$ $saldo",
+            "R\$ ${saldo.toStringAsFixed(2)}",
             style:
                 textStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 24),
           ),

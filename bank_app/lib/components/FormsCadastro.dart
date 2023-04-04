@@ -1,9 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../state_extratoBancario.dart';
+import 'FootterBotao.dart';
 
 enum opcaoTransacao { entrada, saida }
 
@@ -32,115 +31,76 @@ class _FormsCadastroState extends State<FormsCadastro> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    return Expanded(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  InputExtrato(myController: tituloController, label: "Título"),
-                  SizedBox(height: 15),
-                  InputExtrato(
-                      myController: categoriaController, label: "Categoria"),
-                  SizedBox(height: 15),
-                  InputExtrato(myController: valorController, label: "Valor"),
-                  SizedBox(height: 15),
-                  Row(
+    return Column(
+      children: [
+        Expanded(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: RadioListTile<opcaoTransacao>(
-                          title: const Text('Entrada'),
-                          value: opcaoTransacao.entrada,
-                          groupValue: _opcao,
-                          onChanged: (opcaoTransacao? value) {
-                            setState(() {
-                              _opcao = value;
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: RadioListTile<opcaoTransacao>(
-                          title: const Text("Saída"),
-                          value: opcaoTransacao.saida,
-                          groupValue: _opcao,
-                          onChanged: (opcaoTransacao? value) {
-                            setState(() {
-                              _opcao = value;
-                            });
-                          },
-                        ),
+                      InputExtrato(
+                          myController: tituloController, label: "Título"),
+                      SizedBox(height: 15),
+                      InputExtrato(
+                          myController: categoriaController,
+                          label: "Categoria"),
+                      SizedBox(height: 15),
+                      InputExtrato(
+                          myController: valorController, label: "Valor"),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: RadioListTile<opcaoTransacao>(
+                              title: const Text('Entrada'),
+                              value: opcaoTransacao.entrada,
+                              groupValue: _opcao,
+                              onChanged: (opcaoTransacao? value) {
+                                setState(() {
+                                  _opcao = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: RadioListTile<opcaoTransacao>(
+                              title: const Text("Saída"),
+                              value: opcaoTransacao.saida,
+                              groupValue: _opcao,
+                              onChanged: (opcaoTransacao? value) {
+                                setState(() {
+                                  _opcao = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  BotaoEnvioForm(
-                    formKey: _formKey,
-                    opcao: _opcao,
-                    extratoCriado: extratoCriado,
-                    tituloController: tituloController,
-                    categoriaController: categoriaController,
-                    valorController: valorController,
-                    appState: appState,
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        BotaoEnvioForm(
+          formKey: _formKey,
+          opcao: _opcao,
+          extratoCriado: extratoCriado,
+          tituloController: tituloController,
+          categoriaController: categoriaController,
+          valorController: valorController,
+          appState: appState,
+          index: false,
+        ),
+      ],
     );
-  }
-}
-
-class BotaoEnvioForm extends StatelessWidget {
-  const BotaoEnvioForm({
-    super.key,
-    required GlobalKey<FormState> formKey,
-    required opcaoTransacao? opcao,
-    required this.extratoCriado,
-    required this.tituloController,
-    required this.categoriaController,
-    required this.valorController,
-    required this.appState,
-  })  : _formKey = formKey,
-        _opcao = opcao;
-
-  final GlobalKey<FormState> _formKey;
-  final opcaoTransacao? _opcao;
-  final Extrato extratoCriado;
-  final TextEditingController tituloController;
-  final TextEditingController categoriaController;
-  final TextEditingController valorController;
-  final MyAppState appState;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            _opcao == opcaoTransacao.entrada
-                ? extratoCriado.entrada = true
-                : extratoCriado.entrada = false;
-            extratoCriado.nome = tituloController.text;
-            extratoCriado.categoria = categoriaController.text;
-            extratoCriado.valor = double.parse(valorController.text);
-
-            print(""""
-        nome ${extratoCriado.nome}
-        categoria ${extratoCriado.categoria}
-        valor ${extratoCriado.valor}
-        entrada ${extratoCriado.entrada}
-""");
-            appState.adicionarExtrato(extratoCriado);
-            appState.calcularExtrato();
-          }
-        },
-        child: Text("Opa"));
   }
 }
 
