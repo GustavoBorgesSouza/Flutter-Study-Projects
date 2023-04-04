@@ -1,4 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../state_extratoBancario.dart';
 
 enum opcaoTransacao { entrada, saida }
 
@@ -20,14 +25,20 @@ class _FormsCadastroState extends State<FormsCadastro> {
 
   final valorController = TextEditingController();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Extrato extratoCriado = Extrato.empty();
+
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
     return Expanded(
       child: Column(
         children: [
           Container(
             padding: EdgeInsets.all(20),
             child: Form(
+              key: _formKey,
               child: Column(
                 children: [
                   InputExtrato(myController: tituloController, label: "Título"),
@@ -67,6 +78,15 @@ class _FormsCadastroState extends State<FormsCadastro> {
                       ),
                     ],
                   ),
+                  BotaoEnvioForm(
+                    formKey: _formKey,
+                    opcao: _opcao,
+                    extratoCriado: extratoCriado,
+                    tituloController: tituloController,
+                    categoriaController: categoriaController,
+                    valorController: valorController,
+                    appState: appState,
+                  ),
                 ],
               ),
             ),
@@ -74,6 +94,53 @@ class _FormsCadastroState extends State<FormsCadastro> {
         ],
       ),
     );
+  }
+}
+
+class BotaoEnvioForm extends StatelessWidget {
+  const BotaoEnvioForm({
+    super.key,
+    required GlobalKey<FormState> formKey,
+    required opcaoTransacao? opcao,
+    required this.extratoCriado,
+    required this.tituloController,
+    required this.categoriaController,
+    required this.valorController,
+    required this.appState,
+  })  : _formKey = formKey,
+        _opcao = opcao;
+
+  final GlobalKey<FormState> _formKey;
+  final opcaoTransacao? _opcao;
+  final Extrato extratoCriado;
+  final TextEditingController tituloController;
+  final TextEditingController categoriaController;
+  final TextEditingController valorController;
+  final MyAppState appState;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            _opcao == opcaoTransacao.entrada
+                ? extratoCriado.entrada = true
+                : extratoCriado.entrada = false;
+            extratoCriado.nome = tituloController.text;
+            extratoCriado.categoria = categoriaController.text;
+            extratoCriado.valor = double.parse(valorController.text);
+
+            print(""""
+        nome ${extratoCriado.nome}
+        categoria ${extratoCriado.categoria}
+        valor ${extratoCriado.valor}
+        entrada ${extratoCriado.entrada}
+""");
+            appState.adicionarExtrato(extratoCriado);
+            appState.calcularExtrato();
+          }
+        },
+        child: Text("Opa"));
   }
 }
 
@@ -90,6 +157,28 @@ class InputExtrato extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: (value) {
+        switch (label) {
+          case "Título":
+          case "Categoria":
+            if (value == null || value.isEmpty) {
+              return "Por favor, digite um texto válido";
+            }
+            break;
+          case "Valor":
+            if (double.parse(value!) <= 0 ||
+                value.isEmpty ||
+                double.parse(value).isNaN ||
+                value == null) {
+              return "Por favor, digite um número válido e maior que zero";
+            }
+            break;
+          default:
+            return "Please what?";
+        }
+
+        return null;
+      },
       controller: myController,
       decoration: InputDecoration(
         border: OutlineInputBorder(),

@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
 class Extrato {
-  String nome;
-  String categoria;
-  double valor;
-  bool entrada;
+  late String nome;
+  late String categoria;
+  late double valor;
+  late bool entrada;
 
   Extrato(this.nome, this.categoria, this.valor, this.entrada);
+  Extrato.empty();
 }
 
 class MyAppState extends ChangeNotifier {
@@ -32,6 +33,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   void calcularExtrato() {
+    saldo = 0;
     for (var i = 0; i < historico.length; i++) {
       historico[i].entrada
           ? saldo = saldo + historico[i].valor
