@@ -29,7 +29,7 @@ class CardTransacao extends StatelessWidget {
         style: textStyle.copyWith(fontSize: 16),
       ),
       trailing: Text(
-        "R\$ ${historico[index].entrada ? historico[index].valor.toStringAsFixed(2) : -historico[index].valor}",
+        "R\$ ${historico[index].entrada ? historico[index].valor.toStringAsFixed(2) : (-historico[index].valor).toStringAsFixed(2)}",
         style: historico[index].entrada
             ? textStyle.copyWith(
                 color: Colors.green[700], fontWeight: FontWeight.bold)

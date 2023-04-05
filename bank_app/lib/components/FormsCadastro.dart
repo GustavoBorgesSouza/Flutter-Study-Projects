@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../state_extratoBancario.dart';
-import 'FootterBotao.dart';
+import 'FooterBotao.dart';
 
 enum opcaoTransacao { entrada, saida }
 
@@ -89,7 +89,7 @@ class _FormsCadastroState extends State<FormsCadastro> {
             ],
           ),
         ),
-        BotaoEnvioForm(
+        FooterBotao(
           formKey: _formKey,
           opcao: _opcao,
           extratoCriado: extratoCriado,
@@ -126,15 +126,14 @@ class InputExtrato extends StatelessWidget {
             }
             break;
           case "Valor":
-            if (double.parse(value!) <= 0 ||
-                value.isEmpty ||
+            if (value!.isEmpty ||
                 double.parse(value).isNaN ||
-                value == null) {
+                double.parse(value) <= 0) {
               return "Por favor, digite um número válido e maior que zero";
             }
             break;
           default:
-            return "Please what?";
+            return "Por favor, envie um label existente";
         }
 
         return null;

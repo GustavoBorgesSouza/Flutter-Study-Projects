@@ -14,14 +14,8 @@ class MyAppState extends ChangeNotifier {
   double saldo = 0.0;
 
   var historico = <Extrato>[
-    Extrato("oi", "aaaa", 10.5, true),
-    Extrato("Oi", "aaaa", 3.5, false),
-    Extrato("Oi", "aaaa", 2.5, true),
-    Extrato("Oi", "aaaa", 2.5, true),
-    Extrato("Oi", "aaaa", 3.5, false),
-    Extrato("Oi", "aaaa", 2.5, true),
-    Extrato("Oi", "aaaa", 3.5, false),
-    Extrato("Oi", "aaaa", 3.5, false),
+    // Extrato("oi", "aaaa", 10.5, true),
+    // Extrato("Oi", "aaaa", 3.5, false),
   ];
 
   GlobalKey? chaveListaHistorico;

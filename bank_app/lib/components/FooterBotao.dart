@@ -1,11 +1,31 @@
-import 'package:favoriter/screens/HistoricoPage.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/AddExtratoPage.dart';
+import '../screens/HistoricoPage.dart';
+import '../state_extratoBancario.dart';
+import 'FormsCadastro.dart';
 
 class FooterBotao extends StatelessWidget {
-  const FooterBotao({super.key, required this.index});
+  FooterBotao({
+    super.key,
+    required this.index,
+    GlobalKey<FormState>? formKey,
+    opcaoTransacao? opcao,
+    this.extratoCriado,
+    this.tituloController,
+    this.categoriaController,
+    this.valorController,
+    this.appState,
+  })  : _formKey = formKey,
+        _opcao = opcao;
 
+  GlobalKey<FormState>? _formKey;
+  opcaoTransacao? _opcao;
+  Extrato? extratoCriado;
+  TextEditingController? tituloController;
+  TextEditingController? categoriaController;
+  TextEditingController? valorController;
+  MyAppState? appState;
   final bool index;
 
   @override
@@ -18,7 +38,6 @@ class FooterBotao extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(top: 10),
       child: ElevatedButton(
-        child: Text(index ? "Adicionar" : "Salvar"),
         onPressed: () {
           if (index) {
             Navigator.of(context).push(
@@ -27,13 +46,26 @@ class FooterBotao extends StatelessWidget {
               ),
             );
           } else {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => HistoryPage(),
-              ),
-            );
+            if (_formKey!.currentState!.validate()) {
+              _opcao == opcaoTransacao.entrada
+                  ? extratoCriado!.entrada = true
+                  : extratoCriado!.entrada = false;
+              extratoCriado!.nome = tituloController!.text;
+              extratoCriado!.categoria = categoriaController!.text;
+              extratoCriado!.valor = double.parse(valorController!.text);
+
+              appState!.adicionarExtrato(extratoCriado!);
+              appState!.calcularExtrato();
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => HistoryPage(),
+                ),
+              );
+            }
           }
         },
+        child: Text(index ? "Adicionar" : "Salvar"),
       ),
     );
   }

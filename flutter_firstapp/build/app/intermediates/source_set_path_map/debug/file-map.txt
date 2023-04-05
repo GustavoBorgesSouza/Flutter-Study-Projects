@@ -1,0 +1,12 @@
+com.example.flutter_firstapp-debug-0 C:\Flutter_projects\flutter_firstapp\android\app\src\debug\res
+com.example.flutter_firstapp-main-1 C:\Flutter_projects\flutter_firstapp\android\app\src\main\res
+com.example.flutter_firstapp-pngs-2 C:\Flutter_projects\flutter_firstapp\build\app\generated\res\pngs\debug
+com.example.flutter_firstapp-resValues-3 C:\Flutter_projects\flutter_firstapp\build\app\generated\res\resValues\debug
+com.example.flutter_firstapp-rs-4 C:\Flutter_projects\flutter_firstapp\build\app\generated\res\rs\debug
+com.example.flutter_firstapp-mergeDebugResources-5 C:\Flutter_projects\flutter_firstapp\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.flutter_firstapp-mergeDebugResources-6 C:\Flutter_projects\flutter_firstapp\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.flutter_firstapp-merged_res-7 C:\Flutter_projects\flutter_firstapp\build\app\intermediates\merged_res\debug
+com.example.flutter_firstapp-jetified-window-java-1.0.0-beta04-8 C:\Users\admin\.gradle\caches\transforms-3\006d93cd422dbc43e89591147c2de572\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.flutter_firstapp-core-1.6.0-9 C:\Users\admin\.gradle\caches\transforms-3\4ca28c4a71705f8a687c69dda140a277\transformed\core-1.6.0\res
+com.example.flutter_firstapp-jetified-annotation-experimental-1.1.0-10 C:\Users\admin\.gradle\caches\transforms-3\8965c941cf4bee4d72541b965c7c9d39\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.flutter_firstapp-jetified-window-1.0.0-beta04-11 C:\Users\admin\.gradle\caches\transforms-3\dee59bb480020f42d53c2ea15e4501f7\transformed\jetified-window-1.0.0-beta04\res

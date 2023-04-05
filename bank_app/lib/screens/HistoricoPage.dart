@@ -1,4 +1,3 @@
-import 'package:favoriter/components/FootterBotao.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +28,7 @@ class HistoryPage extends StatelessWidget {
             children: [
               HeaderExtrato(textStyle: textStyle, saldo: saldo),
               ExtratoScroll(historico: historico, textStyle: textStyle),
-              BotaoEnvioForm(
+              FooterBotao(
                 index: true,
               ),
             ],
